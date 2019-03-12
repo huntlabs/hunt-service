@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+provider.so
+provider.dylib
+provider.dll
+provider.a
+provider.lib
+provider-test-*
+*.exe
+*.o
+*.obj
+*.lst
+dub.selections.json

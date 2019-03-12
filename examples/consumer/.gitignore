@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+consumer.so
+consumer.dylib
+consumer.dll
+consumer.a
+consumer.lib
+consumer-test-*
+*.exe
+*.o
+*.obj
+*.lst
+dub.selections.json

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package example.api;
+
+
+
+service Hello {
+ 
+   // Range gets the keys in the range from the key-value store.
+  rpc sayHello(HelloRequest) returns (HelloResponse) {
+
+  }
+
+}
+
+message HelloRequest{
+  string name = 1;
+}
+
+message HelloResponse{
+  string echo = 1;
+}
