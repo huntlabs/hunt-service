@@ -9,62 +9,86 @@ import neton.client.NetonOption;
 import neton.client.registry.Instance;
 import neton.client.Listener;
 import neton.client.Event;
+import hunt.service.util.UrlHelper;
+import hunt.service.util.UrlInfo;
+import hunt.service.conf;
 import hunt.logging;
 import std.random;
 
-public class RpcInvokerFactory {
+
+public class RpcInvokerFactory
+{
 
 	private
 	{
 		RegistryService _register;
-		Instance[][string]	_services;
+		Instance[][string] _services;
 		NetonOption _neton;
+		bool _useRegistry = false;
+		RegistryConfig _registryConf;
+		UrlInfo _urlInfo;
 	}
 
-	this(NetonOption neton)
+	this()
 	{
-		assert(neton.ip.length > 0);
-		_neton = neton;
-		_register = NetonFactory.createRegistryService(_neton);
 	}
 
-	void invoker(string[] services...)
+	T createClient(T)()
 	{
-		synchronized(this)
+		if (_useRegistry)
 		{
-			foreach(serviceName; services) {
-			if(!(serviceName in _services))
+			if (_registryConf.serviceName in _services)
 			{
-				_register.subscribe(serviceName,new class Listener{
-					override void onEvent(Event event)
-					{
-						logInfo("service listen : ",event);
-						_services[serviceName] = _register.getAllInstances(serviceName);
-					}
-				});
-				auto instances = _register.getAllInstances(serviceName);
-				_services[serviceName] = instances;
-				logInfo("invoker service : ",serviceName," all instance :",instances);
+				auto instances = _services[_registryConf.serviceName];
+				if (instances.length > 0)
+				{
+					auto idx = uniform(0, instances.length);
+					logInfof("random ip : %s , port : %d ", instances[idx].ip, instances[idx].port);
+					auto channel = new GrpcClient(instances[idx].ip, instances[idx].port);
+					return new T(channel);
+				}
 			}
 		}
-		}
-		
-	}
-
-	T getObject(T)(string serviceName)
-	{
-		if(serviceName in _services)
+		else
 		{
-			auto instances = _services[serviceName];
-			if(instances.length > 0)
-			{
-				auto idx = uniform(0,instances.length);
-				logInfof("random ip : %s , port : %d ",instances[idx].ip, instances[idx].port);
-				auto channel = new GrpcClient(instances[idx].ip, instances[idx].port);
-				return new T(channel);
-			}
+			auto channel = new GrpcClient(_urlInfo.getHost(), cast(ushort)(_urlInfo.getPort()));
+			return new T(channel);
 		}
 
 		return null;
+	}
+
+	void setDirectUrl(string url)
+	{
+		_useRegistry = false;
+		_urlInfo = new UrlInfo;
+		_urlInfo = UrlHelper.toProviderInfo(url);
+	}
+
+	void setRegistry(RegistryConfig conf)
+	{
+		_useRegistry = true;
+		_registryConf = conf;
+		_neton.ip = conf.ip;
+		_neton.port = conf.port;
+		_register = NetonFactory.createRegistryService(_neton);
+
+		if (!(conf.serviceName in _services))
+		{
+			//dfmt off
+			_register.subscribe(conf.serviceName, new class Listener
+				{
+					override void onEvent(Event event)
+					{
+						logInfo("service listen : ", event); 
+						_services[conf.serviceName] = _register.getAllInstances(conf.serviceName);
+					}
+				}
+				);
+			//dfmt on
+			auto instances = _register.getAllInstances(conf.serviceName);
+			_services[conf.serviceName] = instances;
+			logInfo("invoker service : ", conf.serviceName, " all instance :", instances);
+		}
 	}
 }
