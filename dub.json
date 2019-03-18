@@ -1,14 +1,12 @@
 {
 	"name": "hunt-service",
-	"authors": [
-		"huntlabs"
-	],
-	"description": "rpc framework",
+	"homepage": "https://www.huntlabs.net",
+	"description": "Distributed RPC framework for DLang based on neton.",
 	"copyright": "Copyright © 2019, huntlabs",
 	"license": "Apache-2.0",
 	"dependencies": {
-		"hunt-grpc":"~master",
-		"neton-dlang":"~master"
+		"grpc":"~master",
+		"neton-client":"~master"
 	},
 	"targetType": "library"
 }
