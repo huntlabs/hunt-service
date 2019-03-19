@@ -5,8 +5,8 @@
 	"copyright": "Copyright © 2019, huntlabs",
 	"license": "Apache-2.0",
 	"dependencies": {
-		"grpc":"~master",
-		"neton-client":"~master"
+		"grpc": "~>0.2.0",
+		"neton-client":"~>0.0.1"
 	},
 	"targetType": "library"
 }
