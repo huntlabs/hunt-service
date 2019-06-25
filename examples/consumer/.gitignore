@@ -2,6 +2,8 @@
 docs.json
 __dummy.html
 docs/
+consumer
+consumer.exe
 consumer.so
 consumer.dylib
 consumer.dll

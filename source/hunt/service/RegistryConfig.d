@@ -1,4 +1,4 @@
-module hunt.service.conf;
+module hunt.service.RegistryConfig;
 
 struct RegistryConfig
 {

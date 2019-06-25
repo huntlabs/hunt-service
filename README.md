@@ -10,12 +10,10 @@ The following code snippet comes from [Hunt-service examples](https://github.com
 
 ### Define rpc service 
 
-```dlang
+```D
 syntax = "proto3";
 
 package example.api;
-
-
 
 service Hello {
  
@@ -38,11 +36,12 @@ message HelloResponse{
 
 ### Implement service interface for the provider
 
-```dlang
+```D
 module HelloService;
 
 import example.api.examplerpc;
 import example.api.example;
+
 import grpc;
 
 class HelloService : HelloBase
@@ -60,10 +59,10 @@ class HelloService : HelloBase
 
 ### Start service provider
 
-```dlang
+```D
 NetUtil.startEventLoop();
 
-auto providerFactory = new RpcProviderFactory("127.0.0.1",7788);
+auto providerFactory = new ServiceProviderFactory("127.0.0.1",7788);
 
 // If you use a registry, use the following options
 // RegistryConfig conf = {"127.0.0.1",50051,"example.provider"};
@@ -84,10 +83,10 @@ providerFactory.start();
 
 ### Call remote service in consumer
 
-```dlang
+```D
 NetUtil.startEventLoop();
 
-auto invokerFactory = new RpcInvokerFactory();
+auto invokerFactory = new ServiceInvokerFactory();
 
 // If you use a registry, use the following options
 // RegistryConfig conf = {"127.0.0.1",50051,"example.provider"};
@@ -98,10 +97,14 @@ auto client = invokerFactory.createClient!(HelloClient)();
 assert(client !is null);
 
 HelloRequest req = new HelloRequest();
-foreach(num; 1 .. 10) {
+
+foreach(num; 1 .. 10)
+{
 	req.name = to!string(num);
-	auto respon = client.sayHello(req);
-	writeln("response : ",respon.echo);
+
+	auto res = client.sayHello(req);
+
+	writeln("response : ", res.echo);
 }
 ```
 

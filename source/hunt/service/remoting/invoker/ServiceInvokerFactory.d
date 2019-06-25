@@ -1,22 +1,25 @@
-module hunt.service.remoting.invoker.RpcInvokerFactory;
+module hunt.service.remoting.invoker.ServiceInvokerFactory;
 
 import grpc;
+
 import hunt.collection.HashMap;
 import hunt.collection.Map;
+import hunt.logging;
+
+import hunt.service.util.UrlHelper;
+import hunt.service.util.UrlInfo;
+import hunt.service.RegistryConfig;
+
 import neton.client.NetonFactory;
 import neton.client.registry.RegistryService;
 import neton.client.NetonOption;
 import neton.client.registry.Instance;
 import neton.client.Listener;
 import neton.client.Event;
-import hunt.service.util.UrlHelper;
-import hunt.service.util.UrlInfo;
-import hunt.service.conf;
-import hunt.logging;
+
 import std.random;
 
-
-public class RpcInvokerFactory
+public class ServiceInvokerFactory
 {
 
 	private

@@ -1,15 +1,17 @@
-module hunt.service.remoting.provider.RpcProviderFactory;
+module hunt.service.remoting.provider.ServiceProviderFactory;
 
 import grpc;
+
 import hunt.collection.HashMap;
 import hunt.collection.Map;
+import hunt.logging;
+import hunt.service.RegistryConfig;
+
 import neton.client.NetonFactory;
 import neton.client.registry.RegistryService;
 import neton.client.NetonOption;
-import hunt.logging;
-import hunt.service.conf;
 
-public class RpcProviderFactory
+public class ServiceProviderFactory
 {
 
 	private

@@ -1,5 +1,5 @@
 module hunt.service;
 
-public import hunt.service.remoting.invoker.RpcInvokerFactory;
-public import hunt.service.remoting.provider.RpcProviderFactory;
-public import hunt.service.conf;
+public import hunt.service.remoting.invoker.ServiceInvokerFactory;
+public import hunt.service.remoting.provider.ServiceProviderFactory;
+public import hunt.service.RegistryConfig;
